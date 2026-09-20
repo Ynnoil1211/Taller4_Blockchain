@@ -45,10 +45,31 @@ public class App {
         System.out.println("Busco el hash: 35805770");
         blockchain.imprimir("35805770");
 
+        // Imprimir por id
+        System.out.println("Busco la id: 3");
+        blockchain.imprimir(3);
+
         // Buscar un bloque por hash
+        System.out.println("Bloque con hash 35805770");
         Bloque b = blockchain.buscarPorHash("35805770");
         System.out.println("Bloque #" + b.getIdBloque());
+        System.out.println();
 
+        // Buscar un bloque por id
+        System.out.println("Bloque con id 3");
+        Bloque c = blockchain.buscarPorId(3);
+        System.out.println("Hash: " + c.getHash());
+        System.out.println();
+
+        // Buscar bloques inexistentes
+        blockchain.imprimir(12);
+        blockchain.imprimir("ahjsfiuohasfiouhjsfaiouhasf");
+        System.out.println();
+
+        // Insertar un bloque invalido
+        System.out.println("Inserto dos bloques invalidos");
+        blockchain.eliminar(12);
+        blockchain.actualizar(12, "Lionny le manda 50 BTC a Daniel");
 
     }
 }

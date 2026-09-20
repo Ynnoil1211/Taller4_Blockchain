@@ -77,17 +77,26 @@ public class Blockchain {
         return null;
     }
 
-    public Bloque buscarPorId(int id) {
+    public Bloque buscarPorTransaccion(int transaccionId) {
         Bloque resultado = null;
         Bloque actual = cabeza;
         while (actual != null) {
-            if (actual.transaccionId == id) {
+            if (actual.transaccionId == transaccionId) {
                 if (actual.tipo == Tipo.DELETE) return null;
                 else resultado = actual;
             }
             actual = actual.sig;
         }
         return resultado;
+    }
+
+    public Bloque buscarPorId(int idBloque){
+        Bloque actual = cabeza;
+        while (actual != null) {
+            if (actual.idBloque == idBloque) return actual;
+            actual = actual.sig;
+        }
+        return null;
     }
 
     public boolean agregar(String data) {
@@ -108,9 +117,9 @@ public class Blockchain {
     private boolean validarBloque(Bloque bloque) {
         return switch (bloque.tipo) {
             case ADD -> true;
-            case UPDATE -> buscarPorId(bloque.transaccionId) != null;
+            case UPDATE -> buscarPorTransaccion(bloque.transaccionId) != null;
             case DELETE -> {
-                Bloque orig = buscarPorId(bloque.transaccionId);
+                Bloque orig = buscarPorTransaccion(bloque.transaccionId);
                 if (orig != null) {
                     bloque.data = orig.data;
                     yield true;
@@ -120,6 +129,17 @@ public class Blockchain {
         };
     }
 
+    public void imprimir(int idBloque){
+        Bloque busqueda = buscarPorId(idBloque);
+        if(busqueda != null) {
+            System.out.println("Bloque #" + busqueda.idBloque);
+            System.out.println("Transacción: " + busqueda.mostrar());
+            System.out.println("Hash anterior: " + busqueda.getHashPrev());
+            System.out.println("Hash actual: " + busqueda.getHash());
+            System.out.println();
+        }
+        else System.out.println("El bloque #" + idBloque + " no existe o no se encuentra en la blockchain");
+    }
     public void imprimir(String hash) {
         Bloque busqueda = buscarPorHash(hash);
         if(busqueda != null) {
@@ -131,6 +151,8 @@ public class Blockchain {
         }
         else System.out.println("El bloque con el hash " + hash + " no existe o no se encuentra en la blockchain");
     }
+
+
     public void imprimirTodo() {
         if (size != 0) {
             Bloque actual = cabeza;
