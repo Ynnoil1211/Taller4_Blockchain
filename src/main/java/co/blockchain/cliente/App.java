@@ -34,7 +34,7 @@ MARIA ALEJANDRA RAMOS NAIZIR - 0222510006
 public class App {
     public static void main(String args[]){
         Blockchain blockchain = new Blockchain();
-        blockchain.añadir("Hola");
+        blockchain.agregar("Hola");
         blockchain.imprimir();
 
     }

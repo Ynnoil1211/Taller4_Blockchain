@@ -33,13 +33,13 @@ package co.blockchain.app;
 import co.blockchain.app.Bloque.Tipo;
 
 public class Blockchain {
-    Bloque cabeza;
-    Bloque cola;
-    int tamaño;
+    private Bloque cabeza;
+    private Bloque cola;
+    private int size;
     public Blockchain(){
         cabeza = null;
         cola = null;
-        tamaño = 0;
+        size = 0;
     }
     private boolean push(Bloque bloque){
         if (bloque == cola || bloque.sig != null) {
@@ -53,7 +53,7 @@ public class Blockchain {
         if (cola == null) cabeza = bloque;
         else {bloque.hashPrev = cola.getHash(); cola.sig = bloque;}
         cola = bloque;
-        tamaño = tamaño + 1;
+        size = size + 1;
         System.out.println("Bloque añadido con id " + bloque.id + " y hash " + bloque.getHash());
         System.out.println();
         return true;
@@ -80,7 +80,7 @@ public class Blockchain {
         return resultado;
     }
 
-    public boolean añadir(String data){
+    public boolean agregar(String data){
         Bloque nuevoBloque = Bloque.add(data);
         return push(nuevoBloque);
     }
@@ -97,7 +97,7 @@ public class Blockchain {
 
 
     public void imprimir(){
-        if(tamaño!=0){
+        if(size!=0){
             Bloque actual = cabeza;
             while(actual!=null){
                 System.out.println(actual.mostrar());
@@ -110,5 +110,9 @@ public class Blockchain {
         else{
             System.out.println("La Blockchain esta vacia");
         }
+    }
+
+    public int getSize(){
+        return this.size;
     }
 }
