@@ -62,7 +62,7 @@ public class Blockchain {
     public boolean buscarPorHash(String hash){
         Bloque actual = cabeza;
         while(actual != null){
-            if(actual.calcularHash().equals(hash)) return true;
+            if(actual.getHash().equals(hash)) return true;
             actual = actual.sig;
         }
         return false;
