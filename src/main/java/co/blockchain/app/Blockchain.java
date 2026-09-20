@@ -53,6 +53,7 @@ public class Blockchain {
             System.out.println("Bloque rechazado");
             return false;
         }
+        bloque.idBloque = size;
         if (cola == null) cabeza = bloque;
         else {
             bloque.hashPrev = cola.getHash();
@@ -61,7 +62,7 @@ public class Blockchain {
         cola = bloque;
         size = size + 1;
         System.out.println(
-            "Bloque añadido con id " + bloque.id + " y hash " + bloque.getHash()
+            "Bloque añadido con id " + bloque.transaccionId + " y hash " + bloque.getHash()
         );
         System.out.println();
         return true;
@@ -80,7 +81,7 @@ public class Blockchain {
         Bloque resultado = null;
         Bloque actual = cabeza;
         while (actual != null) {
-            if (actual.id == id) {
+            if (actual.transaccionId == id) {
                 if (actual.tipo == Tipo.DELETE) return null;
                 else resultado = actual;
             }
@@ -107,9 +108,9 @@ public class Blockchain {
     private boolean validarBloque(Bloque bloque) {
         return switch (bloque.tipo) {
             case ADD -> true;
-            case UPDATE -> buscarPorId(bloque.id) != null;
+            case UPDATE -> buscarPorId(bloque.transaccionId) != null;
             case DELETE -> {
-                Bloque orig = buscarPorId(bloque.id);
+                Bloque orig = buscarPorId(bloque.transaccionId);
                 if (orig != null) {
                     bloque.data = orig.data;
                     yield true;
@@ -123,8 +124,9 @@ public class Blockchain {
         if (size != 0) {
             Bloque actual = cabeza;
             while (actual != null) {
-                System.out.println(actual.mostrar());
-                System.out.println("Hash previo: " + actual.getHashPrev());
+                System.out.println("Bloque #" + actual.idBloque);
+                System.out.println("Transacción: " + actual.mostrar());
+                System.out.println("Hash anterior: " + ((actual.getHashPrev() == null) ? "None" : actual.getHashPrev()));
                 System.out.println("Hash actual: " + actual.getHash());
                 System.out.println();
                 actual = actual.sig;
