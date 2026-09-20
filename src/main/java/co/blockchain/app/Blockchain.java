@@ -31,133 +31,71 @@ MARIA ALEJANDRA RAMOS NAIZIR - 0222510006
  */
 package co.blockchain.app;
 public class Blockchain {
-    Bloque primerBloque;
-    Bloque ultimoBloque;
-    int tamaño = 0;
+    Bloque cabeza;
+    Bloque cola;
+    int tamaño;
     public Blockchain(){
-    	limpiar();
-    }
-    private void limpiar(){
-    	primerBloque = null;
+        cabeza = null;
+        cola = null;
         tamaño = 0;
     }
-    private boolean estaVacia(){
-    	if (tamaño == 0)
-            return true;
-	else
+    public boolean añadir(Bloque bloque){
+        if (bloque == cola || bloque.sig != null) {
+            System.out.println("El bloque ya esta encadenado");
             return false;
-    }
-	//Para un nuevo blockchain
-    public boolean adicionar(String dato){
-        //ADICIONAR AL COMIENZO DE LA Blockchain
-        Bloque nuevoBloque = Bloque(dato);
-        if(estaVacia()) {
-            primerBloque = nuevoBloque;
-            ultimoBloque = nuevoBloque;
         }
-        else{
-           adicionarFinal(dato);
-	    }
-        tamaño=tamaño+1;
+        if (!bloque.esValido(this) || bloque == cola || bloque.sig != null) {
+            System.out.println("Bloque rechazado");
+            return false;
+        }
+        if (cola == null) cabeza = bloque;
+        else {bloque.hashPrev = cola.getHash(); cola.sig = bloque;}
+        cola = bloque;
+        tamaño = tamaño + 1;
+        System.out.println("Bloque añadido con id " + bloque.id + " y hash " + bloque.getHash());
         return true;
     }
 
-    /*
-     * adicionarFinal
-     *
-     * adiciona un Bloque al final de la Blockchain
-     *
-     */
-    public boolean buscarPorHash(Bloque bloque){
-        return true;
+    public boolean buscarPorHash(String hash){
+        Bloque actual = cabeza;
+        while(actual != null){
+            if(actual.calcularHash().equals(hash)) return true;
+            actual = actual.sig;
+        }
+        return false;
     }
-    public boolean buscarPorId(Bloque bloque){
-        return true;
+    public Bloque buscarPorId(int id){
+        Bloque resultado = null;
+        Bloque actual = cabeza;
+        while(actual!=null){
+            if(actual.id == id){
+                if(actual instanceof BloqueDelete) return null;
+                else resultado = actual;
+            }
+            actual = actual.sig;
+        }
+        return resultado;
     }
 
-    public boolean adicionarFinal(String dato){
-        String hashPrev = this.ultimoBloque.getHashActual();
-        Bloque nuevoBloque = Bloque(dato, hashPrev);
-        ultimoBloque.sig = nuevoBloque;
-        ultimoBloque = nuevoBloque;
-        return true;
-    }
-
-    public boolean eliminar(int id, String dato){
-        String hashPrev = this.ultimoBloque.getHashActual();
-        Bloque nuevoBloque = Bloque(dato, id, hashPrev);
-        ultimoBloque.sig = nuevoBloque;
-        ultimoBloque = nuevoBloque;
-        return true;
+    public boolean eliminar(int id){
+        Bloque nuevoBloque = new BloqueDelete(id);
+        return añadir(nuevoBloque);
     }
 
     public boolean update(int id, String dato){
-        Bloque temp = Bloque
-        String hashPrev = this.ultimoBloque.getHashActual();
-        Bloque nuevoBloque = Bloque(dato, hashPrev);
-        ultimoBloque.sig = nuevoBloque;
-        ultimoBloque = nuevoBloque;
-        return true;
+        Bloque nuevoBloque = new BloqueUpdate(id, dato);
+        return añadir(nuevoBloque);
     }
 
 
-
-    /*
-     * adicionarEntreBloques
-     *
-     * adiciona un Bloque entre Bloques en order no decreciente
-     *
-     */
-
-//    public boolean adicionarEntreBloques(Bloque Bloque){
-//        Bloque nuevoBloque = Bloque;
-//	Bloque temp = null;
-//	Bloque anterior = null;
-//	if(estaVacia())
-//            primerBloque = nuevoBloque;
-//	else{
-//            temp = primerBloque;
-//            anterior = temp;
-//            boolean band=false;
-//            //CASO 1 : Blockchain tiene un elemento
-//            if(tamaño==1){
-//                if(Integer.parseInt(temp.getDato().toString()) < Integer.parseInt(nuevoBloque.getDato().toString())){
-//                    //if(temp.getDato() < Bloque.getDato()){
-//                    primerBloque.sig=nuevoBloque;
-//                }
-//		else{
-//                    nuevoBloque.sig = primerBloque;
-//                    primerBloque=nuevoBloque;
-//		}
-//            }
-//            else{//Blockchain TIENE MAS DE UN ELEMENTO
-//                while(temp!=null && Integer.parseInt(temp.getDato().toString()) < Integer.parseInt(nuevoBloque.getDato().toString())){
-//                    anterior=temp;
-//                    temp = temp.sig;
-//                    band=true;
-//		}
-//		if(band){//
-//                    nuevoBloque.sig =anterior.sig;
-//                    anterior.sig = nuevoBloque;
-//		}
-//		else{//El valor del nuevo Bloque es menor
-//                    nuevoBloque.sig=temp;
-//                    primerBloque=nuevoBloque;
-//		}
-//            }
-//	}
-//	tamaño=tamaño+1;
-//	return true;
-//    }
-
     public void imprimir(){
-        if(!estaVacia()){
-            Bloque temp = primerBloque;
-            while(temp!=null){
-                System.out.println(temp.getDato());
-                System.out.println(temp.getHashPrev());
-                System.out.println(temp.getHashActual());
-                temp=temp.sig;
+        if(tamaño!=0){
+            Bloque actual = cabeza;
+            while(actual!=null){
+                System.out.println(actual.getData());
+                System.out.println(actual.getHashPrev());
+                System.out.println(actual.getHash());
+                actual=actual.sig;
             }
 	}
         else{
