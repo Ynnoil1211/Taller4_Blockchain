@@ -23,7 +23,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package co.blockchain.app;
+package co.blockchain.cliente;
+import co.blockchain.app.Blockchain;
 /*
 Elaborado por:
 DANIEL ESTEBAN BORRE CARO - 0222510016
@@ -32,6 +33,9 @@ MARIA ALEJANDRA RAMOS NAIZIR - 0222510006
  */
 public class App {
     public static void main(String args[]){
+        Blockchain blockchain = new Blockchain();
+        blockchain.añadir("Hola");
+        blockchain.imprimir();
 
     }
 }

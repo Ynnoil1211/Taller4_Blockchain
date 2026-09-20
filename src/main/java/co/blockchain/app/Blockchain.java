@@ -30,6 +30,8 @@ LIONNY LIN LI - 0222510050
 MARIA ALEJANDRA RAMOS NAIZIR - 0222510006
  */
 package co.blockchain.app;
+import co.blockchain.app.Bloque.Tipo;
+
 public class Blockchain {
     Bloque cabeza;
     Bloque cola;
@@ -39,12 +41,12 @@ public class Blockchain {
         cola = null;
         tamaño = 0;
     }
-    public boolean añadir(Bloque bloque){
+    private boolean push(Bloque bloque){
         if (bloque == cola || bloque.sig != null) {
             System.out.println("El bloque ya esta encadenado");
             return false;
         }
-        if (!bloque.esValido(this) || bloque == cola || bloque.sig != null) {
+        if (!bloque.esValido(this)) {
             System.out.println("Bloque rechazado");
             return false;
         }
@@ -53,6 +55,7 @@ public class Blockchain {
         cola = bloque;
         tamaño = tamaño + 1;
         System.out.println("Bloque añadido con id " + bloque.id + " y hash " + bloque.getHash());
+        System.out.println();
         return true;
     }
 
@@ -69,7 +72,7 @@ public class Blockchain {
         Bloque actual = cabeza;
         while(actual!=null){
             if(actual.id == id){
-                if(actual instanceof BloqueDelete) return null;
+                if(actual.tipo == Tipo.DELETE) return null;
                 else resultado = actual;
             }
             actual = actual.sig;
@@ -77,14 +80,19 @@ public class Blockchain {
         return resultado;
     }
 
-    public boolean eliminar(int id){
-        Bloque nuevoBloque = new BloqueDelete(id);
-        return añadir(nuevoBloque);
+    public boolean añadir(String data){
+        Bloque nuevoBloque = Bloque.add(data);
+        return push(nuevoBloque);
     }
 
-    public boolean update(int id, String dato){
-        Bloque nuevoBloque = new BloqueUpdate(id, dato);
-        return añadir(nuevoBloque);
+    public boolean eliminar(int id){
+        Bloque nuevoBloque = Bloque.delete(id);
+        return push(nuevoBloque);
+    }
+
+    public boolean actualizar(int id, String data){
+        Bloque nuevoBloque = Bloque.update(id, data);
+        return push(nuevoBloque);
     }
 
 
@@ -92,9 +100,10 @@ public class Blockchain {
         if(tamaño!=0){
             Bloque actual = cabeza;
             while(actual!=null){
-                System.out.println(actual.getData());
-                System.out.println(actual.getHashPrev());
-                System.out.println(actual.getHash());
+                System.out.println(actual.mostrar());
+                System.out.println("Hash previo: " + actual.getHashPrev());
+                System.out.println("Hash actual: " + actual.getHash());
+                System.out.println();
                 actual=actual.sig;
             }
 	}
