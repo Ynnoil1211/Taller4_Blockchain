@@ -62,19 +62,19 @@ public class Blockchain {
         cola = bloque;
         size = size + 1;
         System.out.println(
-            "Bloque añadido con id " + bloque.transaccionId + " y hash " + bloque.getHash()
+            "Bloque #" + bloque.idBloque + " añadido (Tx ID: " + bloque.transaccionId + ") con hash " + bloque.getHash()
         );
         System.out.println();
         return true;
     }
 
-    public boolean buscarPorHash(String hash) {
+    public Bloque buscarPorHash(String hash) {
         Bloque actual = cabeza;
         while (actual != null) {
-            if (actual.getHash().equals(hash)) return true;
+            if (actual.getHash().equals(hash)) return actual;
             actual = actual.sig;
         }
-        return false;
+        return null;
     }
 
     public Bloque buscarPorId(int id) {
@@ -120,13 +120,24 @@ public class Blockchain {
         };
     }
 
-    public void imprimir() {
+    public void imprimir(String hash) {
+        Bloque busqueda = buscarPorHash(hash);
+        if(busqueda != null) {
+            System.out.println("Bloque #" + busqueda.idBloque);
+            System.out.println("Transacción: " + busqueda.mostrar());
+            System.out.println("Hash anterior: " + busqueda.getHashPrev());
+            System.out.println("Hash actual: " + busqueda.getHash());
+            System.out.println();
+        }
+        else System.out.println("El bloque con el hash " + hash + " no existe o no se encuentra en la blockchain");
+    }
+    public void imprimirTodo() {
         if (size != 0) {
             Bloque actual = cabeza;
             while (actual != null) {
                 System.out.println("Bloque #" + actual.idBloque);
                 System.out.println("Transacción: " + actual.mostrar());
-                System.out.println("Hash anterior: " + ((actual.getHashPrev() == null) ? "None" : actual.getHashPrev()));
+                System.out.println("Hash anterior: " + actual.getHashPrev() );
                 System.out.println("Hash actual: " + actual.getHash());
                 System.out.println();
                 actual = actual.sig;

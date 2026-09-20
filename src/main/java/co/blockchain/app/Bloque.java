@@ -72,10 +72,15 @@ public class Bloque {
     }
 
     public String getHashPrev() {
+        if(this.hashPrev == null) return "None";
         return this.hashPrev;
     }
 
     public String getHash() {
         return this.calcularHash();
+    }
+
+    public int getIdBloque(){
+        return this.idBloque;
     }
 }

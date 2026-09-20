@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package co.blockchain.cliente;
 import co.blockchain.app.Blockchain;
+import co.blockchain.app.Bloque;
 /*
 Elaborado por:
 DANIEL ESTEBAN BORRE CARO - 0222510016
@@ -38,7 +39,16 @@ public class App {
         blockchain.actualizar(0, "Juan envía 0.5 BTC a Pacho");
         blockchain.agregar("Daniel envia 5 USDT a Lionny");
         blockchain.eliminar(1);
-        blockchain.imprimir();
+        blockchain.imprimirTodo();
+
+        // Imprimir por hash
+        System.out.println("Busco el hash: 35805770");
+        blockchain.imprimir("35805770");
+
+        // Buscar un bloque por hash
+        Bloque b = blockchain.buscarPorHash("35805770");
+        System.out.println("Bloque #" + b.getIdBloque());
+
 
     }
 }
