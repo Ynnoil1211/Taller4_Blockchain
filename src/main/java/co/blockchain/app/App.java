@@ -24,7 +24,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 package co.blockchain.app;
-import java.util.Random;
 /*
 Elaborado por:
 DANIEL ESTEBAN BORRE CARO - 0222510016
@@ -33,19 +32,6 @@ MARIA ALEJANDRA RAMOS NAIZIR - 0222510006
  */
 public class App {
     public static void main(String args[]){
-        /*Random random = new Random();
-        for (int i = 0; i < 5; i++) {
-            char caracter = (char) ('A' + random.nextInt(26));
-            System.out.println(caracter);
-        }*/
 
-        Lista<Integer> l = new Lista<>();
-        l.adicionar(new Nodo<>(20));
-        l.adicionar(new Nodo<>(30));
-        l.adicionar(new Nodo<>(40));
-        l.adicionar(new Nodo<>(50));
-        l.adicionar(new Nodo<>(60));
-        l.adicionar(new Nodo<>(70));
-        l.imprimir();
     }
 }
