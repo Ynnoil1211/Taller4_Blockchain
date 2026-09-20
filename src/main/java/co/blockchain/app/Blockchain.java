@@ -1,4 +1,3 @@
-
 /*
 Copyright (c) 2019 - 2026, Juan Carlos Garcia Ojeda, Universidad de Cartagena
 All rights reserved.
@@ -30,49 +29,59 @@ LIONNY LIN LI - 0222510050
 MARIA ALEJANDRA RAMOS NAIZIR - 0222510006
  */
 package co.blockchain.app;
+
 import co.blockchain.app.Bloque.Tipo;
 
 public class Blockchain {
+
     private Bloque cabeza;
     private Bloque cola;
     private int size;
-    public Blockchain(){
+
+    public Blockchain() {
         cabeza = null;
         cola = null;
         size = 0;
     }
-    private boolean push(Bloque bloque){
+
+    private boolean push(Bloque bloque) {
         if (bloque == cola || bloque.sig != null) {
             System.out.println("El bloque ya esta encadenado");
             return false;
         }
-        if (!bloque.esValido(this)) {
+        if (!validarBloque(bloque)) {
             System.out.println("Bloque rechazado");
             return false;
         }
         if (cola == null) cabeza = bloque;
-        else {bloque.hashPrev = cola.getHash(); cola.sig = bloque;}
+        else {
+            bloque.hashPrev = cola.getHash();
+            cola.sig = bloque;
+        }
         cola = bloque;
         size = size + 1;
-        System.out.println("Bloque añadido con id " + bloque.id + " y hash " + bloque.getHash());
+        System.out.println(
+            "Bloque añadido con id " + bloque.id + " y hash " + bloque.getHash()
+        );
         System.out.println();
         return true;
     }
 
-    public boolean buscarPorHash(String hash){
+    public boolean buscarPorHash(String hash) {
         Bloque actual = cabeza;
-        while(actual != null){
-            if(actual.getHash().equals(hash)) return true;
+        while (actual != null) {
+            if (actual.getHash().equals(hash)) return true;
             actual = actual.sig;
         }
         return false;
     }
-    public Bloque buscarPorId(int id){
+
+    public Bloque buscarPorId(int id) {
         Bloque resultado = null;
         Bloque actual = cabeza;
-        while(actual!=null){
-            if(actual.id == id){
-                if(actual.tipo == Tipo.DELETE) return null;
+        while (actual != null) {
+            if (actual.id == id) {
+                if (actual.tipo == Tipo.DELETE) return null;
                 else resultado = actual;
             }
             actual = actual.sig;
@@ -80,39 +89,52 @@ public class Blockchain {
         return resultado;
     }
 
-    public boolean agregar(String data){
+    public boolean agregar(String data) {
         Bloque nuevoBloque = Bloque.add(data);
         return push(nuevoBloque);
     }
 
-    public boolean eliminar(int id){
+    public boolean eliminar(int id) {
         Bloque nuevoBloque = Bloque.delete(id);
         return push(nuevoBloque);
     }
 
-    public boolean actualizar(int id, String data){
+    public boolean actualizar(int id, String data) {
         Bloque nuevoBloque = Bloque.update(id, data);
         return push(nuevoBloque);
     }
 
+    private boolean validarBloque(Bloque bloque) {
+        return switch (bloque.tipo) {
+            case ADD -> true;
+            case UPDATE -> buscarPorId(bloque.id) != null;
+            case DELETE -> {
+                Bloque orig = buscarPorId(bloque.id);
+                if (orig != null) {
+                    bloque.data = orig.data;
+                    yield true;
+                }
+                yield false;
+            }
+        };
+    }
 
-    public void imprimir(){
-        if(size!=0){
+    public void imprimir() {
+        if (size != 0) {
             Bloque actual = cabeza;
-            while(actual!=null){
+            while (actual != null) {
                 System.out.println(actual.mostrar());
                 System.out.println("Hash previo: " + actual.getHashPrev());
                 System.out.println("Hash actual: " + actual.getHash());
                 System.out.println();
-                actual=actual.sig;
+                actual = actual.sig;
             }
-	}
-        else{
+        } else {
             System.out.println("La Blockchain esta vacia");
         }
     }
 
-    public int getSize(){
+    public int getSize() {
         return this.size;
     }
 }

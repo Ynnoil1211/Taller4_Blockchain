@@ -54,22 +54,6 @@ public class Bloque {
         bloque.data = null; // Se resuelve al validar
         return bloque;
     }
-
-    boolean esValido(Blockchain blockchain){
-        return switch (this.tipo) {
-            case ADD -> true;
-            case UPDATE -> blockchain.buscarPorId(this.id) != null;
-            case DELETE -> {
-                Bloque orig = blockchain.buscarPorId(this.id);
-                if (orig != null) {
-                    this.data = orig.data;
-                    yield true;
-                }
-                yield false;
-            }
-        };
-    }
-
     public String getData() {
         return data;
     }
