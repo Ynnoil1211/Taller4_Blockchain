@@ -10,7 +10,7 @@ modification, are permitted provided that the following conditions are met:
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
    and/or other materials provided with the distribution.
-   
+
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,10 +23,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package app;
-
-import co.edu.unicartagena.list.Lista;
-import co.edu.unicartagena.list.Nodo;
+package co.blockchain.app;
 import java.util.Random;
 /*
 Elaborado por:
@@ -41,7 +38,7 @@ public class App {
             char caracter = (char) ('A' + random.nextInt(26));
             System.out.println(caracter);
         }*/
-        
+
         Lista<Integer> l = new Lista<>();
         l.adicionar(new Nodo<>(20));
         l.adicionar(new Nodo<>(30));

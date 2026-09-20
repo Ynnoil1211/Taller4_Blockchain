@@ -4,7 +4,7 @@ DANIEL ESTEBAN BORRE CARO - 0222510016
 LIONNY LIN LI - 0222510050
 MARIA ALEJANDRA RAMOS NAIZIR - 0222510006
  */
-package co.edu.unicartagena.list;
+package co.blockchain.app;
 
 public class Bloque {
 	String dato;
