@@ -1,3 +1,4 @@
+
 /*
 Copyright (c) 2019 - 2026, Juan Carlos Garcia Ojeda, Universidad de Cartagena
 All rights reserved.
@@ -10,7 +11,7 @@ modification, are permitted provided that the following conditions are met:
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
    and/or other materials provided with the distribution.
-   
+
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -28,7 +29,7 @@ DANIEL ESTEBAN BORRE CARO - 0222510016
 LIONNY LIN LI - 0222510050
 MARIA ALEJANDRA RAMOS NAIZIR - 0222510006
  */
-package co.edu.unicartagena.list;
+package co.blockchain.app;
 public class Blockchain {
     Bloque primerBloque;
     Bloque ultimoBloque;
@@ -103,11 +104,11 @@ public class Blockchain {
 
     /*
      * adicionarEntreBloques
-     * 
+     *
      * adiciona un Bloque entre Bloques en order no decreciente
-     * 
+     *
      */
-        
+
 //    public boolean adicionarEntreBloques(Bloque Bloque){
 //        Bloque nuevoBloque = Bloque;
 //	Bloque temp = null;
@@ -148,7 +149,7 @@ public class Blockchain {
 //	tamaño=tamaño+1;
 //	return true;
 //    }
-	
+
     public void imprimir(){
         if(!estaVacia()){
             Bloque temp = primerBloque;
