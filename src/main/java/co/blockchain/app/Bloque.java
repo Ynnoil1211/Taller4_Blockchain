@@ -8,7 +8,7 @@ package co.blockchain.app;
 import java.util.Objects;
 public class Bloque {
 
-    public enum Tipo {
+    enum Tipo {
         ADD,
         UPDATE,
         DELETE,
@@ -21,7 +21,7 @@ public class Bloque {
     Bloque sig;
     static int cnt = 0;
 
-    public String calcularHash() {
+    private String calcularHash() {
         int hashInt = Objects.hash(id, data, hashPrev);
         return Integer.toHexString(hashInt);
     }
