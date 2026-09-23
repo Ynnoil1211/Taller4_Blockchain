@@ -23,9 +23,9 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package co.blockchain.cliente;
-import co.blockchain.app.Blockchain;
-import co.blockchain.app.Bloque;
+package co.blockchain.app;
+import co.blockchain.linkedlist.Blockchain;
+import co.blockchain.linkedlist.Bloque;
 /*
 Elaborado por:
 DANIEL ESTEBAN BORRE CARO - 0222510016
@@ -46,45 +46,63 @@ public class App {
         System.out.println(" 2. ESTADO ACTUAL DE LA BLOCKCHAIN");
         blockchain.imprimirTodo();
 
-        System.out.println(" 3. PRUEBAS DE BÚSQUEDA ");
+        System.out.println(" 3. PRUEBAS DE BUSQUEDA ");
 
         // Imprimir por hash
-        System.out.println("Búsqueda por Hash existente (Hash: 35805770) ");
-        blockchain.imprimir("35805770");
+        System.out.println("Busqueda por Hash existente: ");
+        String hash1 = blockchain.buscarPorId(1).getHash();
+        System.out.println("Hash: " + hash1);
+        blockchain.imprimirPorHash(hash1);
+        System.out.println();
 
         // Imprimir por id
-
-        System.out.println("Búsqueda por ID de bloque (ID: 3)");
-        blockchain.imprimir(3);
+        System.out.println("Busqueda por ID de bloque (ID: 3)");
+        blockchain.imprimirPorIDBloque(3);
+        System.out.println();
 
         // Buscar un bloque por hash
-        System.out.println("Búsqueda del bloque con hash 35805770");
-        Bloque b = blockchain.buscarPorHash("35805770");
-        System.out.println("Bloque #" + b.getIdBloque() + " | Transacción: " + b.mostrar());
+        System.out.println("Busqueda del bloque con hash: " + hash1);
+        Bloque b = blockchain.buscarPorHash(hash1);
+        if (b != null) {
+            b.mostrarDatosBloque();
+        }
         System.out.println();
 
         // Buscar un bloque por id
-        System.out.println("Búsqueda del bloque con id 3");
+        System.out.println("Busqueda del bloque con id 3");
         Bloque c = blockchain.buscarPorId(3);
-        System.out.println("Bloque #" + c.getIdBloque() + " | Hash actual: " + c.getHash() + " | Transacción: " + c.mostrar());
+        if (c != null) {
+            c.mostrarDatosBloque();
+        }
         System.out.println();
 
-        System.out.println(" 4. CASOS INVÁLIDOS Y NO ENCONTRADOS");
+        //Mostrar el historia de una Transaccion por su ID
+        System.out.println("Imprimir el historial completo de una transaccion: ");
+        blockchain.imprimirPorIDTransaccion(0);
+        System.out.println();
+
+        System.out.println(" 4. CASOS INVALIDOS Y NO ENCONTRADOS");
         // Buscar bloques inexistentes
         System.out.println("Búsqueda de bloque inexistente por ID (ID: 12):");
-        blockchain.imprimir(12);
+        blockchain.imprimirPorIDBloque(12);
         System.out.println();
 
-        System.out.println("Búsqueda de bloque inexistente por Hash (Hash: inq1003): ");
-        blockchain.imprimir("inq1003");
+        System.out.println("Busqueda de bloque inexistente por Hash (Hash: inq1003): ");
+        blockchain.imprimirPorHash("inq1003");
         System.out.println();
 
         // Insertar un bloque invalido
-        System.out.println("Inserción de bloques inválidos:");
+        System.out.println("Insercion de bloques invalidos:");
         System.out.println("Eliminar bloque con ID 12:");
         blockchain.eliminar(12);
         System.out.println("Actualizar bloque con ID 12:");
         blockchain.actualizar(12, "Lionny envía 50 BTC a Daniel");
 
+        // Buscar una transaccion inexistente
+        blockchain.imprimirPorIDTransaccion(213);
+        System.out.println();
+
+        System.out.println(" 5. VALIDACION DE INTEGRIDAD DE LA BLOCKCHAIN");
+        blockchain.validarCadena();
     }
 }

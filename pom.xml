@@ -49,7 +49,7 @@
         <artifactId>exec-maven-plugin</artifactId>
         <version>3.5.0</version>
         <configuration>
-          <mainClass>co.blockchain.cliente.App</mainClass>
+          <mainClass>co.blockchain.app.App</mainClass>
         </configuration>
       </plugin>
     </plugins>

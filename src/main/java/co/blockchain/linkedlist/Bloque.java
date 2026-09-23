@@ -4,7 +4,7 @@ DANIEL ESTEBAN BORRE CARO - 0222510016
 LIONNY LIN LI - 0222510050
 MARIA ALEJANDRA RAMOS NAIZIR - 0222510006
  */
-package co.blockchain.app;
+package co.blockchain.linkedlist;
 import java.util.Objects;
 public class Bloque {
 
@@ -82,5 +82,11 @@ public class Bloque {
 
     public int getIdBloque(){
         return this.idBloque;
+    }
+    public void mostrarDatosBloque() {
+        System.out.println("Bloque #" + this.idBloque);
+        System.out.println("Transacción: " + this.mostrar());
+        System.out.println("Hash anterior: " + this.getHashPrev() );
+        System.out.println("Hash actual: " + this.getHash());
     }
 }
