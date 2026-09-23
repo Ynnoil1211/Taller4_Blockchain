@@ -99,10 +99,12 @@ public class App {
         blockchain.actualizar(12, "Lionny envía 50 BTC a Daniel");
 
         // Buscar una transaccion inexistente
+        System.out.println("Búsqueda de una transacción inexistente por ID:");
         blockchain.imprimirPorIDTransaccion(213);
         System.out.println();
 
         System.out.println(" 5. VALIDACION DE INTEGRIDAD DE LA BLOCKCHAIN");
+        System.out.println("Verificando la continuidad de la Blockchain:");
         blockchain.validarCadena();
     }
 }
