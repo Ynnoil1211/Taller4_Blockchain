@@ -35,41 +35,56 @@ MARIA ALEJANDRA RAMOS NAIZIR - 0222510006
 public class App {
     public static void main(String args[]){
         Blockchain blockchain = new Blockchain();
+
+        System.out.println(" 1. REGISTRO DE TRANSACCIONES EN LA BLOCKCHAIN");
         blockchain.agregar("Juan envía 1 BTC a Pacho");
         blockchain.actualizar(0, "Juan envía 0.5 BTC a Pacho");
         blockchain.agregar("Daniel envia 5 USDT a Lionny");
         blockchain.eliminar(1);
+
+        System.out.println();
+        System.out.println(" 2. ESTADO ACTUAL DE LA BLOCKCHAIN");
         blockchain.imprimirTodo();
 
+        System.out.println(" 3. PRUEBAS DE BÚSQUEDA ");
+
         // Imprimir por hash
-        System.out.println("Busco el hash: 35805770");
+        System.out.println("Búsqueda por Hash existente (Hash: 35805770) ");
         blockchain.imprimir("35805770");
 
         // Imprimir por id
-        System.out.println("Busco la id: 3");
+
+        System.out.println("Búsqueda por ID de bloque (ID: 3)");
         blockchain.imprimir(3);
 
         // Buscar un bloque por hash
-        System.out.println("Bloque con hash 35805770");
+        System.out.println("Búsqueda del bloque con hash 35805770");
         Bloque b = blockchain.buscarPorHash("35805770");
-        System.out.println("Bloque #" + b.getIdBloque());
+        System.out.println("Bloque #" + b.getIdBloque() + " | Transacción: " + b.mostrar());
         System.out.println();
 
         // Buscar un bloque por id
-        System.out.println("Bloque con id 3");
+        System.out.println("Búsqueda del bloque con id 3");
         Bloque c = blockchain.buscarPorId(3);
-        System.out.println("Hash: " + c.getHash());
+        System.out.println("Bloque #" + c.getIdBloque() + " | Hash actual: " + c.getHash() + " | Transacción: " + c.mostrar());
         System.out.println();
 
+        System.out.println(" 4. CASOS INVÁLIDOS Y NO ENCONTRADOS");
         // Buscar bloques inexistentes
+        System.out.println("Búsqueda de bloque inexistente por ID (ID: 12):");
         blockchain.imprimir(12);
-        blockchain.imprimir("ahjsfiuohasfiouhjsfaiouhasf");
+        System.out.println();
+
+        System.out.println("Búsqueda de bloque inexistente por Hash (Hash: inq1003): ");
+        blockchain.imprimir("inq1003");
         System.out.println();
 
         // Insertar un bloque invalido
-        System.out.println("Inserto dos bloques invalidos");
+        System.out.println("Inserción de bloques inválidos:");
+        System.out.println("Eliminar bloque con ID 12:");
         blockchain.eliminar(12);
-        blockchain.actualizar(12, "Lionny le manda 50 BTC a Daniel");
+        System.out.println("Actualizar bloque con ID 12:");
+        blockchain.actualizar(12, "Lionny envía 50 BTC a Daniel");
 
     }
 }
