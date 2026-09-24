@@ -53,16 +53,19 @@ public class Blockchain {
             System.out.println("Bloque rechazado");
             return false;
         }
-        bloque.idBloque = size;
-        if (cola == null) cabeza = bloque;
+        if (cola == null) {
+            cabeza = bloque;
+            bloque.procesarBloque(size, null);
+        }
         else {
-            bloque.hashPrev = cola.getHash();
+            String hashPrev = cola.getHashActual();
+            bloque.procesarBloque(size, hashPrev);
             cola.sig = bloque;
         }
         cola = bloque;
         size = size + 1;
         System.out.println(
-            "Bloque #" + bloque.idBloque + " añadido (Tx ID: " + bloque.transaccionId + ") con hash " + bloque.getHash()
+            "Bloque #" + bloque.idBloque + " añadido (Tx ID: " + bloque.transaccionId + ") con hash " + bloque.getHashActual()
         );
         System.out.println();
         return true;
@@ -73,13 +76,23 @@ public class Blockchain {
         return push(nuevoBloque);
     }
 
-    public boolean eliminar(int id) {
-        Bloque nuevoBloque = Bloque.delete(id);
+    public boolean eliminar(int transaccionId) {
+        Bloque orig = buscarPorTransaccion(transaccionId);
+        if (orig == null) {
+            System.out.println("Transaccion no encontrada");
+            return false;
+        }
+        Bloque nuevoBloque = Bloque.delete(transaccionId, orig.getData());
         return push(nuevoBloque);
     }
 
-    public boolean actualizar(int id, String data) {
-        Bloque nuevoBloque = Bloque.update(id, data);
+    public boolean actualizar(int transaccionId, String data) {
+        Bloque orig = buscarPorTransaccion(transaccionId);
+        if (orig == null) {
+            System.out.println("Transaccion no encontrada");
+            return false;
+        }
+        Bloque nuevoBloque = Bloque.update(transaccionId, data);
         return push(nuevoBloque);
     }
 
@@ -88,37 +101,32 @@ public class Blockchain {
     private boolean validarBloque(Bloque bloque) {
         return switch (bloque.tipo) {
             case ADD -> true;
-            case UPDATE -> buscarPorTransaccion(bloque.transaccionId) != null;
-            case DELETE -> {
-                Bloque orig = buscarPorTransaccion(bloque.transaccionId);
-                if (orig != null) {
-                    // Se asigna al bloque DELETE el mismo dato del bloque original antes de ser añadido a la blockchain.
-                    // este proceso es valido dado que la inmutablidad rige sobre la cadena, no sobre el bloque individual.
-                    bloque.data = orig.data;
-                    yield true;
-                }
-                yield false;
-            }
+            case UPDATE, DELETE -> buscarPorTransaccion(bloque.transaccionId) != null;
         };
     }
 
     public boolean validarCadena() {
         if(cabeza==null){
-            System.out.println("La Blockchain esta vacia. ");
-        }
-        else{
+            System.out.println("Blockchain vacia. ");
+        } else {
+            //Para validar una cadena, comparamos tanto el hashPrev de actual.sig con el hashActual del bloque actual
+            //como el mismo hashActual guardado en memoria con el hash Calculado
             Bloque actual = cabeza;
-            while(actual.sig != null){
-                if(!actual.sig.getHashPrev().equals(actual.getHash())){
-                    System.out.println("Blockchain corrompida.");
-                    System.out.println("Bloque dañado: ");
+            while (actual != null) {
+                if (!actual.getHashActual().equals(actual.calcularHash())) {
+                    System.out.println("Blockchain corrompida. Bloque dañado: ");
+                    actual.mostrarDatosBloque();
+                    return false;
+                }
+                if(actual.sig != null && !actual.sig.getHashPrev().equals(actual.getHashActual())){
+                    System.out.println("Blockchain corrompida. Bloque dañado: ");
                     actual.sig.mostrarDatosBloque();
                     return false;
                 }
                 actual = actual.sig;
             }
+            System.out.println("Blockchain Valida. ");
         }
-        System.out.println("Blockchain Valida. ");
         return true;
     }
 
@@ -127,7 +135,7 @@ public class Blockchain {
     public Bloque buscarPorHash(String hash) {
         Bloque actual = cabeza;
         while (actual != null) {
-            if (actual.getHash().equals(hash)) return actual;
+            if (actual.getHashActual().equals(hash)) return actual;
             actual = actual.sig;
         }
         return null;

@@ -42,28 +42,30 @@ public class App {
         blockchain.agregar("Daniel envia 5 USDT a Lionny");
         blockchain.eliminar(1);
 
-        System.out.println();
         System.out.println(" 2. ESTADO ACTUAL DE LA BLOCKCHAIN");
         blockchain.imprimirTodo();
 
         System.out.println(" 3. PRUEBAS DE BUSQUEDA ");
 
         // Imprimir por hash
-        System.out.println("Busqueda por Hash existente: ");
-        String hash1 = blockchain.buscarPorId(1).getHash();
+        System.out.println("Busqueda por Hash existente (Metodo: imprimirPorHash()): ");
+        String hash1 = blockchain.buscarPorId(1).getHashActual();
         System.out.println("Hash: " + hash1);
+        System.out.println("Informacion del Bloque Encontrado: ");
         blockchain.imprimirPorHash(hash1);
         System.out.println();
 
         // Imprimir por id
         System.out.println("Busqueda por ID de bloque (ID: 3)");
+        System.out.println("Informacion del Bloque Encontrado: ");
         blockchain.imprimirPorIDBloque(3);
         System.out.println();
 
         // Buscar un bloque por hash
-        System.out.println("Busqueda del bloque con hash: " + hash1);
+        System.out.println("Busqueda del bloque con hash (Metodo: buscarPorHash()): " + hash1);
         Bloque b = blockchain.buscarPorHash(hash1);
         if (b != null) {
+            System.out.println("Informacion del Bloque Encontrado: ");
             b.mostrarDatosBloque();
         }
         System.out.println();
@@ -72,6 +74,7 @@ public class App {
         System.out.println("Busqueda del bloque con id 3");
         Bloque c = blockchain.buscarPorId(3);
         if (c != null) {
+            System.out.println("Informacion del Bloque Encontrado: ");
             c.mostrarDatosBloque();
         }
         System.out.println();
@@ -93,9 +96,9 @@ public class App {
 
         // Insertar un bloque invalido
         System.out.println("Insercion de bloques invalidos:");
-        System.out.println("Eliminar bloque con ID 12:");
+        System.out.println("Eliminar Transaccion con ID 12:");
         blockchain.eliminar(12);
-        System.out.println("Actualizar bloque con ID 12:");
+        System.out.println("Actualizar Transaccion con ID 12:");
         blockchain.actualizar(12, "Lionny envía 50 BTC a Daniel");
 
         // Buscar una transaccion inexistente

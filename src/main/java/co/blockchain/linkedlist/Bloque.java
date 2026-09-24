@@ -19,18 +19,23 @@ public class Bloque {
     int transaccionId; // id de la transaccion/registro
     String data;
     String hashPrev;
+    String hashActual;
     Bloque sig;
     static int cnt = 0;
 
-    private String calcularHash() {
-        int hashInt = Objects.hash(transaccionId, data, hashPrev);
+    public String calcularHash() {
+        int hashInt = Objects.hash(tipo, transaccionId, data, hashPrev);
         return Integer.toHexString(hashInt);
     }
 
     private Bloque(){
         this.hashPrev = null;
+        this.hashActual = null;
         this.sig = null;
     }
+    //Por la necesidad del manejo de hashPrev, los constructores internos de los bloques solo
+    // resolveran datos internos como tipo y transaccion id.
+
     //Constructor para bloque add
     static Bloque add(String data) {
         Bloque bloque = new Bloque();
@@ -48,11 +53,11 @@ public class Bloque {
         return bloque;
     }
     // Constructor para bloque delete
-    static Bloque delete(int id){
+    static Bloque delete(int transaccionId, String origData){
         Bloque bloque = new Bloque();
         bloque.tipo = Tipo.DELETE;
-        bloque.transaccionId = id;
-        bloque.data = null; // Se resuelve al validar
+        bloque.transaccionId = transaccionId;
+        bloque.data = origData;
         return bloque;
     }
     public String getData() {
@@ -76,8 +81,14 @@ public class Bloque {
         return this.hashPrev;
     }
 
-    public String getHash() {
-        return this.calcularHash();
+    public void procesarBloque(int IdBloque, String hashPrev){
+        this.idBloque = IdBloque;
+        this.hashPrev = hashPrev;
+        this.hashActual = this.calcularHash();
+    }
+
+    public String getHashActual() {
+        return this.hashActual;
     }
 
     public int getIdBloque(){
@@ -87,6 +98,6 @@ public class Bloque {
         System.out.println("Bloque #" + this.idBloque);
         System.out.println("Transacción: " + this.mostrar());
         System.out.println("Hash anterior: " + this.getHashPrev() );
-        System.out.println("Hash actual: " + this.getHash());
+        System.out.println("Hash actual: " + this.getHashActual());
     }
 }
